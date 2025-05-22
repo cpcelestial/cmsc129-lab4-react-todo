@@ -74,7 +74,6 @@ export function TaskList() {
   };
 
   const handleTaskDelete = async (taskId: string) => {
-    // Find the task to delete
     const taskToDelete = tasks.find((task) => task.id === taskId);
 
     if (!taskToDelete) {
@@ -82,14 +81,10 @@ export function TaskList() {
       return;
     }
 
-    console.log("Task to delete:", taskToDelete);
-
     try {
-      // First delete the task from Firestore
       await taskStore.deleteTask(taskId);
       console.log("Task deleted from Firestore");
 
-      // Then show toast with undo button that has direct access to the deleted task
       toast("Task deleted", {
         description: `"${taskToDelete.title}" has been removed`,
         action: {
@@ -98,7 +93,6 @@ export function TaskList() {
             console.log("Undo clicked, restoring task:", taskToDelete);
 
             try {
-              // Use the stored taskToDelete directly instead of relying on state
               await taskStore.addTask(taskToDelete);
               console.log("Task restored successfully");
               toast.success("Task restored successfully");
@@ -108,7 +102,7 @@ export function TaskList() {
             }
           },
         },
-        duration: 10000,
+        duration: 7000,
       });
     } catch (error) {
       console.error("Error deleting task:", error);
